@@ -1,18 +1,22 @@
 [
   {
     "name": "Dr. John Smith",
-    "slug": "dr-john-smith-3b0840"
+    "slug": "dr-john-smith-06faa3"
   },
   {
     "name": "Dr. Amal Haddad",
-    "slug": "dr-amal-haddad-6f7d57"
+    "slug": "dr-amal-haddad-327df0"
   },
   {
     "name": "Dr. Sarah Youssef",
-    "slug": "dr-sarah-youssef-29e2bc"
+    "slug": "dr-sarah-youssef-39027d"
   },
   {
     "name": "Dr. Karim Chalhoub",
-    "slug": "dr-karim-chalhoub-b637f3"
+    "slug": "dr-karim-chalhoub-adfea4"
+  },
+  {
+    "name": "Dr. Dana Eido",
+    "slug": "dr-dana-eido-f14231"
   }
 ]
