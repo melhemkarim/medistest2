@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import RSVPForm from "./RSVPForm";
+import GallerySlide from "./GallerySlide";
+import SchedulePanel from "./SchedulePanel";
 import { event } from "@/lib/event";
 
 /**
@@ -75,8 +77,8 @@ function PanelBackground({ photoIndex, active }: { photoIndex: number; active: b
           (e.currentTarget as HTMLImageElement).style.display = "none";
         }}
       />
-      <div className="absolute inset-0 bg-brand/90 mix-blend-color" />
-      <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-black/80" />
+      <div className="absolute inset-0 bg-brand/80 mix-blend-color" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-black/40 to-black/90" />
       <div className="absolute inset-0 bg-grain" />
     </div>
   );
@@ -200,7 +202,7 @@ function BackButton({ onClick }: { onClick: () => void }) {
 }
 
 export default function InviteCard({ name, slug }: { name: string; slug: string }) {
-  const PANEL_COUNT = 4;
+  const PANEL_COUNT = 6;
   const [index, setIndex] = useState(0);
   const [vw, setVw] = useState(0);
   const t = useCountdown(event.isoDateTime);
@@ -243,25 +245,17 @@ export default function InviteCard({ name, slug }: { name: string; slug: string 
             animate={index === 0 ? "show" : "hidden"}
             className="flex h-full flex-col items-center justify-center px-8 text-center text-white"
           >
-            <motion.div
-              variants={item}
-              className="rounded-3xl bg-white px-10 py-6 shadow-[0_14px_50px_rgba(0,0,0,0.5)] ring-1 ring-black/5 sm:px-12 sm:py-7"
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/brand/medispharm-logo.png"
-                alt="MedisPharm"
-                className="h-16 w-auto sm:h-20"
-              />
-            </motion.div>
-
-            <motion.p variants={item} className="mx-auto mt-10 max-w-xs font-display text-3xl italic leading-snug sm:text-4xl">
-              MedisPharm and AWMU invite you to celebrate
+            <motion.p variants={item} className="text-xl uppercase tracking-[0.3em] text-white">
+              Medispharm and AWMU invite you to
             </motion.p>
 
-            {event.title && (
-              <motion.p variants={item} className="mt-6 text-sm uppercase tracking-[0.25em] text-white/70">
-                {event.title}
+            <motion.h1 variants={item} className="mt-10 font-display text-4xl  leading-none sm:text-7xl">
+              {event.title}
+            </motion.h1>
+
+            {event.tagline && (
+              <motion.p variants={item} className="mt-10  text-sm uppercase tracking-[0.25em] text-white">
+                {event.tagline}
               </motion.p>
             )}
           </motion.div>
@@ -278,17 +272,26 @@ export default function InviteCard({ name, slug }: { name: string; slug: string 
           <Dots count={PANEL_COUNT} index={index} />
         </div>
 
-        {/* Panel 3 — Countdown */}
+        {/* Panel 3 — Full program / schedule, revealed one event at a time */}
         <div className="relative h-full w-screen flex-shrink-0">
           <PanelBackground photoIndex={2} active={index === 2} />
+          <SchedulePanel active={index === 2} />
+          <BackButton onClick={() => goTo(1)} />
+          <NextButton onClick={() => goTo(3)} />
+          <Dots count={PANEL_COUNT} index={index} />
+        </div>
+
+        {/* Panel 4 — Countdown */}
+        <div className="relative h-full w-screen flex-shrink-0">
+          <PanelBackground photoIndex={3} active={index === 3} />
           <motion.div
             variants={container}
             initial="hidden"
-            animate={index === 2 ? "show" : "hidden"}
+            animate={index === 3 ? "show" : "hidden"}
             className="flex h-full flex-col items-center justify-center px-8 text-center text-white"
           >
-            <motion.p variants={item} className="text-xs uppercase tracking-[0.3em] text-white/90">
-              Counting down
+            <motion.p variants={item} className="text-xs uppercase tracking-[0.3em] text-white/60">
+              Counting down to
             </motion.p>
             <motion.div variants={item} className="mt-6 flex items-end justify-center gap-6">
               <div className="text-center">
@@ -315,18 +318,39 @@ export default function InviteCard({ name, slug }: { name: string; slug: string 
               {t?.done ? "the celebration has begun" : "until we celebrate together"}
             </motion.p>
           </motion.div>
-          <BackButton onClick={() => goTo(1)} />
-          <NextButton onClick={() => goTo(3)} label="RSVP" />
+          <BackButton onClick={() => goTo(2)} />
+          <NextButton onClick={() => goTo(4)} />
           <Dots count={PANEL_COUNT} index={index} />
         </div>
 
-        {/* Panel 4 — Guest name + RSVP */}
+        {/* Panel 5 — Photo slideshow from a previous event */}
         <div className="relative h-full w-screen flex-shrink-0">
-          <PanelBackground photoIndex={3} active={index === 3} />
+          <GallerySlide active={index === 4} />
           <motion.div
             variants={container}
             initial="hidden"
-            animate={index === 3 ? "show" : "hidden"}
+            animate={index === 4 ? "show" : "hidden"}
+            className="flex h-full flex-col items-center justify-end px-8 pb-28 text-center text-white"
+          >
+            <motion.p variants={item} className="text-xs uppercase tracking-[0.3em] text-white/60">
+              A look back
+            </motion.p>
+            <motion.p variants={item} className="mt-3 font-display text-2xl italic sm:text-3xl">
+              Moments from last time
+            </motion.p>
+          </motion.div>
+          <BackButton onClick={() => goTo(3)} />
+          <NextButton onClick={() => goTo(5)} label="RSVP" />
+          <Dots count={PANEL_COUNT} index={index} />
+        </div>
+
+        {/* Panel 6 — Guest name + RSVP */}
+        <div className="relative h-full w-screen flex-shrink-0">
+          <PanelBackground photoIndex={5} active={index === 5} />
+          <motion.div
+            variants={container}
+            initial="hidden"
+            animate={index === 5 ? "show" : "hidden"}
             className="flex h-full flex-col items-center justify-center px-8 text-center text-white"
           >
             <motion.p variants={item} className="text-sm uppercase tracking-[0.2em] text-white/60">
@@ -344,7 +368,7 @@ export default function InviteCard({ name, slug }: { name: string; slug: string 
               <RSVPForm name={name} slug={slug} />
             </motion.div>
           </motion.div>
-          <BackButton onClick={() => goTo(2)} />
+          <BackButton onClick={() => goTo(4)} />
           <Dots count={PANEL_COUNT} index={index} />
         </div>
       </motion.div>
