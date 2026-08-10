@@ -106,6 +106,7 @@ export default function GallerySlide({ active }: { active: boolean }) {
               muted
               playsInline
               autoPlay
+              preload="auto"
               className="absolute inset-0 h-full w-full object-cover"
               initial={{ opacity: 0, scale: 1.05 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -129,8 +130,8 @@ export default function GallerySlide({ active }: { active: boolean }) {
           )}
         </AnimatePresence>
       )}
-      <div className="absolute inset-0 bg-brand/70 mix-blend-color" />
-      <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/72" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/45 to-black/80" />
+      <div className="absolute inset-0 bg-black/20" />
       <div className="absolute inset-0 bg-grain" />
 
       {visibleCount > 1 && (

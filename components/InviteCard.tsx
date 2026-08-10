@@ -8,12 +8,19 @@ import SchedulePanel from "./SchedulePanel";
 import { event } from "@/lib/event";
 
 /**
- * Using one photo across every panel for a consistent look.
- * Drop your photo into /public/images named photo-1.jpg.
- * (Want a different photo per screen instead? Add photo-2.jpg etc.
- * back into this array — each panel already asks for its own index.)
+ * A different photo per screen. Drop your photos into /public/images
+ * named exactly photo-1.jpg through photo-5.jpg (greeting, date/location,
+ * program, countdown, RSVP — in that order). Any one that's missing just
+ * falls back to the generated gradient automatically, so it's safe to add
+ * them gradually.
  */
-const PHOTOS = ["/images/photo-1.jpeg"];
+const PHOTOS = [
+  "/images/1.jpeg",
+  "/images/2.jpeg",
+  "/images/3.jpeg",
+  "/images/4.jpeg",
+  "/images/5.jpeg",
+];
 
 const mapLinkHref = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event.mapQuery)}`;
 
@@ -77,8 +84,8 @@ function PanelBackground({ photoIndex, active }: { photoIndex: number; active: b
           (e.currentTarget as HTMLImageElement).style.display = "none";
         }}
       />
-      <div className="absolute inset-0 bg-brand/80 mix-blend-color" />
-      <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-black/40 to-black/90" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/45 to-black/80" />
+      <div className="absolute inset-0 bg-black/50" />
       <div className="absolute inset-0 bg-grain" />
     </div>
   );
@@ -145,12 +152,6 @@ function DetailsPanel({ active }: { active: boolean }) {
           </span>
           <span className="flex-shrink-0 text-[10px] uppercase tracking-[0.15em] text-white/60">Open ↗</span>
         </motion.a>
-
-        {/* Dress code */}
-        <motion.div variants={detailsItem} className="flex flex-col items-center gap-3">
-          <p className="text-xs uppercase tracking-[0.2em] text-white/50">Dress code</p>
-          <p className="font-display text-2xl italic sm:text-3xl">{event.dressCode}</p>
-        </motion.div>
       </motion.div>
     </div>
   );
@@ -245,16 +246,16 @@ export default function InviteCard({ name, slug }: { name: string; slug: string 
             animate={index === 0 ? "show" : "hidden"}
             className="flex h-full flex-col items-center justify-center px-8 text-center text-white"
           >
-            <motion.p variants={item} className="text-xl uppercase tracking-[0.3em] text-white">
+            <motion.p variants={item} className="text-3xl uppercase tracking-[0.3em] text-white">
               Medispharm and AWMU invite you to
             </motion.p>
 
-            <motion.h1 variants={item} className="mt-10 font-display text-4xl  leading-none sm:text-7xl">
+            <motion.h1 variants={item} className="mt-5 font-display text-6xl  leading-none sm:text-7xl">
               {event.title}
             </motion.h1>
 
             {event.tagline && (
-              <motion.p variants={item} className="mt-10  text-sm uppercase tracking-[0.25em] text-white">
+              <motion.p variants={item} className="mt-5  text-sm uppercase tracking-[0.25em] text-white">
                 {event.tagline}
               </motion.p>
             )}
@@ -315,7 +316,7 @@ export default function InviteCard({ name, slug }: { name: string; slug: string 
               </div>
             </motion.div>
             <motion.p variants={item} className="mt-10 font-display text-lg italic text-white/80">
-              {t?.done ? "the celebration has begun" : "until we celebrate together"}
+              {t?.done ? "the celebration has begun" : "celebrate together"}
             </motion.p>
           </motion.div>
           <BackButton onClick={() => goTo(2)} />
@@ -346,7 +347,7 @@ export default function InviteCard({ name, slug }: { name: string; slug: string 
 
         {/* Panel 6 — Guest name + RSVP */}
         <div className="relative h-full w-screen flex-shrink-0">
-          <PanelBackground photoIndex={5} active={index === 5} />
+          <PanelBackground photoIndex={4} active={index === 5} />
           <motion.div
             variants={container}
             initial="hidden"

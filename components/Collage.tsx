@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 
 // Same single photo used across the whole site — see components/InviteCard.tsx
-const PHOTO = "/images/photo-1.jpeg";
+const PHOTO = "/images/photo-1.jpg";
 
 export default function Collage() {
   return (

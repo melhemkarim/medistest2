@@ -5,7 +5,6 @@ export const event = {
   // Tagline shown under the event name on the first screen.
   tagline: "One Aim To Accelerate Healing",
   dateLabel: "September 5–6, 2026",
-  dressCode: "Formal attire",
   // Plain-text address used to build the embedded map + the "Open in Maps" link.
   // Be as specific as you can — exact address works best.
   mapQuery: "InterContinental Mzaar Lebanon, Mzaar Kfardebian",
