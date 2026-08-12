@@ -48,9 +48,9 @@ export const event = {
     },
     {
       eyebrow: "Day Two",
-      heading: "Road To The Top",
+      heading: "Ride To The Top",
       date: "Saturday, September 6",
-      items: [{ time: "10:30 AM", label: "Breakfast And The Ride To The Top" }],
+      items: [{ time: "10:00 AM", label: "Breakfast" }],
       dressCode: "Comfy Sport Wear",
       note: "",
     },
