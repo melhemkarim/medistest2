@@ -46,9 +46,9 @@ export default function ScheduleSlide({ data, active }: { data: ScheduleDay; act
         className="w-full max-w-sm transition-opacity duration-700"
         style={{ opacity: active ? 1 : 0 }}
       >
-        <p className="text-center text-xs uppercase tracking-[0.3em] text-white/60">{data.eyebrow}</p>
+        <p className="text-center text-xs uppercase tracking-[0.3em] text-white">{data.eyebrow}</p>
         <p className="mt-2 text-center font-display text-3xl italic sm:text-4xl">{data.heading}</p>
-        <p className="mb-9 mt-1 text-center text-[10px] uppercase tracking-[0.2em] text-white/45">
+        <p className="mb-9 mt-1 text-center text-[10px] uppercase tracking-[0.2em] text-white">
           {data.date}
         </p>
 
@@ -69,13 +69,14 @@ export default function ScheduleSlide({ data, active }: { data: ScheduleDay; act
                   }}
                 />
                 <p
-                  className="text-[10px] uppercase tracking-[0.15em] text-white/40"
+                  className="text-[10px] uppercase tracking-[0.15em] text-white"
                   style={{ opacity: isRevealed ? 1 : 0.35, transition: "opacity 650ms ease" }}
                 >
                   {it.time}
                 </p>
                 <p
-                  className="mt-0.5 font-display text-lg italic sm:text-xl"
+                  className="mt-0.5 font-dis
+                  ay text-lg italic sm:text-xl"
                   style={{ opacity: isRevealed ? 1 : 0.35, transition: "opacity 650ms ease" }}
                 >
                   {it.label}
@@ -91,12 +92,12 @@ export default function ScheduleSlide({ data, active }: { data: ScheduleDay; act
             style={{ opacity: allRevealed ? 1 : 0, transition: "opacity 700ms ease" }}
           >
             {data.dressCode && (
-              <p className="text-[10px] uppercase tracking-[0.25em] text-white/50">
-                Dress code — <span className="text-white/85">{data.dressCode}</span>
+              <p className="text-[10px] uppercase tracking-[0.25em] text-white">
+                Dress code — <span className="text-white">{data.dressCode}</span>
               </p>
             )}
             {data.note && (
-              <p className="mt-2 font-display text-sm italic text-white/70">{data.note}</p>
+              <p className="mt-2 font-display text-lg italic text-white">{data.note}</p>
             )}
           </div>
         )}

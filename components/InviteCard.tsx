@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import RSVPForm from "./RSVPForm";
-import GallerySlide from "./GallerySlide";
 import ScheduleSlide from "./ScheduleSlide";
 import { event } from "@/lib/event";
 import MusicToggle from "@/components/MusicToggle";
@@ -132,8 +131,8 @@ function PanelBackground({ photoIndex, active }: { photoIndex: number; active: b
           (e.currentTarget as HTMLImageElement).style.display = "none";
         }}
       />
-      <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-black/40 to-black/80" />
-      <div className="absolute inset-0 bg-black/25" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/40 to-black/60" />
+      <div className="absolute inset-0 bg-black/5" />
       <div className="absolute inset-0 bg-grain" />
     </div>
   );
@@ -267,7 +266,7 @@ function Dots({ count, index, light = false }: { count: number; index: number; l
                 : "w-6 bg-white"
               : light
                 ? "w-1.5 bg-slate-700/30"
-                : "w-1.5 bg-white/40"
+                : "w-1.5 bg-white"
           }`}
         />
       ))}
@@ -288,7 +287,7 @@ function NextButton({
     <button
       onClick={onClick}
       className={`group absolute bottom-16 right-6 z-20 flex flex-col items-center gap-1 transition-colors sm:right-10 ${
-        light ? "text-slate-500 hover:text-slate-800" : "text-white/70 hover:text-white"
+        light ? "text-slate-500 hover:text-slate-800" : "text-white hover:text-white"
       }`}
       aria-label="Next"
     >
@@ -304,7 +303,7 @@ function BackButton({ onClick }: { onClick: () => void }) {
   return (
     <button
       onClick={onClick}
-      className="group absolute bottom-16 left-6 z-20 flex flex-col items-center gap-1 text-white/70 transition-colors hover:text-white sm:left-10"
+      className="group absolute bottom-16 left-6 z-20 flex flex-col items-center gap-1 text-white transition-colors hover:text-white sm:left-10"
       aria-label="Back"
     >
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="transition-transform group-hover:-translate-x-1">
@@ -316,7 +315,7 @@ function BackButton({ onClick }: { onClick: () => void }) {
 }
 
 export default function InviteCard({ name, slug }: { name: string; slug: string }) {
-  const PANEL_COUNT = 8;
+  const PANEL_COUNT = 7;
   const [index, setIndex] = useState(0);
   const [vw, setVw] = useState(0);
   const t = useCountdown(event.isoDateTime);
@@ -431,32 +430,32 @@ export default function InviteCard({ name, slug }: { name: string; slug: string 
             animate={index === 5 ? "show" : "hidden"}
             className="flex h-full flex-col items-center justify-center px-8 text-center text-white"
           >
-            <motion.p variants={item} className="text-xs uppercase tracking-[0.3em] text-white/60">
+            <motion.p variants={item} className="text-xs uppercase tracking-[0.3em] text-white">
               Counting down 
             </motion.p>
             <motion.div variants={item} className="mt-8 flex items-end justify-center gap-8">
               <div className="text-center">
                 <p className="font-display text-9xl italic leading-none">{t ? t.days : "--"}</p>
-                <p className="mt-3 text-xs uppercase tracking-[0.2em] text-white/60">Days</p>
+                <p className="mt-3 text-xs uppercase tracking-[0.2em] text-white">Days</p>
               </div>
               <div className="h-24 w-px bg-white/25" />
               <div className="space-y-5 text-left">
                 <div className="flex items-baseline gap-3">
                   <span className="font-display text-4xl italic">{t ? t.hours : "--"}</span>
-                  <span className="text-xs uppercase tracking-[0.2em] text-white/50">Hours</span>
+                  <span className="text-xs uppercase tracking-[0.2em] text-white">Hours</span>
                 </div>
                 <div className="flex items-baseline gap-3">
                   <span className="font-display text-4xl italic">{t ? t.minutes : "--"}</span>
-                  <span className="text-xs uppercase tracking-[0.2em] text-white/50">Minutes</span>
+                  <span className="text-xs uppercase tracking-[0.2em] text-white">Minutes</span>
                 </div>
                 <div className="flex items-baseline gap-3">
                   <span className="font-display text-4xl italic">{t ? t.seconds : "--"}</span>
-                  <span className="text-xs uppercase tracking-[0.2em] text-white/50">Seconds</span>
+                  <span className="text-xs uppercase tracking-[0.2em] text-white">Seconds</span>
                 </div>
               </div>
             </motion.div>
             {t?.done && (
-              <motion.p variants={item} className="mt-10 font-display text-lg italic text-white/80">
+              <motion.p variants={item} className="mt-10 font-display text-lg italic text-white">
                 the celebration has begun
               </motion.p>
             )}
@@ -466,26 +465,7 @@ export default function InviteCard({ name, slug }: { name: string; slug: string 
           <Dots count={PANEL_COUNT} index={index} />
         </div>
 
-        {/* Panel 7 — Photo slideshow from a previous event */}
-        <div className="relative h-full w-screen flex-shrink-0">
-          <GallerySlide active={index === 6} />
-          <motion.div
-            variants={container}
-            initial="hidden"
-            animate={index === 6 ? "show" : "hidden"}
-            className="flex h-full flex-col items-center justify-end px-8 pb-28 text-center text-white"
-          >
-            <motion.p variants={item} className="text-xs uppercase tracking-[0.3em] text-white/60">
-              A look back
-            </motion.p>
-            <motion.p variants={item} className="mt-3 font-display text-2xl italic sm:text-3xl">
-              Moments from last time
-            </motion.p>
-          </motion.div>
-          <BackButton onClick={() => goTo(5)} />
-          <NextButton onClick={() => goTo(7)} label="RSVP" />
-          <Dots count={PANEL_COUNT} index={index} />
-        </div>
+        
 
         {/* Panel 8 — Guest name + RSVP */}
         <div className="relative h-full w-screen flex-shrink-0">
@@ -493,7 +473,7 @@ export default function InviteCard({ name, slug }: { name: string; slug: string 
   <motion.div
   variants={container}
   initial="hidden"
-  animate={index === 7 ? "show" : "hidden"}
+  animate={index === 6 ? "show" : "hidden"}
   className="flex h-full flex-col items-center justify-center px-8 text-center text-[#0085B7]"
 >
   <motion.p variants={item} className="text-sm uppercase tracking-[0.2em] text-[#0085B7]/70">

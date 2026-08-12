@@ -48,7 +48,7 @@ export default function SchedulePanel({ active }: { active: boolean }) {
         className="w-full max-w-sm transition-opacity duration-700"
         style={{ opacity: active ? 1 : 0 }}
       >
-        <p className="mb-6 text-center text-xs uppercase tracking-[0.3em] text-white/60">
+        <p className="mb-6 text-center text-xs uppercase tracking-[0.3em] text-white">
           The Program
         </p>
 
@@ -68,7 +68,7 @@ export default function SchedulePanel({ active }: { active: boolean }) {
                     }}
                   >
                     <p className="-ml-9 font-display text-lg italic sm:text-xl">{row.dayHeader.day}</p>
-                    <p className="-ml-9 text-[9px] uppercase tracking-[0.2em] text-white/45">
+                    <p className="-ml-9 text-[9px] uppercase tracking-[0.2em] text-white">
                       {row.dayHeader.date}
                     </p>
                   </div>
@@ -83,7 +83,7 @@ export default function SchedulePanel({ active }: { active: boolean }) {
                       transition: "opacity 600ms ease, box-shadow 600ms ease, transform 600ms ease",
                     }}
                   />
-                  <span className="w-14 flex-shrink-0 text-[10px] uppercase tracking-[0.15em] text-white/40">
+                  <span className="w-14 flex-shrink-0 text-[10px] uppercase tracking-[0.15em] text-white">
                     {row.time}
                   </span>
                   <span

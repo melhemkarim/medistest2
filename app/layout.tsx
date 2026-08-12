@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Playfair_Display, Poppins } from "next/font/google";
 import "./globals.css";
 
@@ -24,6 +24,10 @@ export const metadata: Metadata = {
   description: "Medispharm and AWMU invite you to celebrate with us.",
 };
 
+export const viewport: Viewport = {
+  themeColor: "#faf6f0",
+};
+
 export default function RootLayout({
   children,
 }: {
@@ -31,7 +35,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${display.variable} ${body.variable} font-body bg-brand-deep text-ivory antialiased`}>
+      <body className={`${display.variable} ${body.variable} font-body bg-[#faf6f0] text-slate-800 antialiased`}>
         {children}
       </body>
     </html>
