@@ -431,7 +431,7 @@ export default function InviteCard({ name, slug }: { name: string; slug: string 
             className="flex h-full flex-col items-center justify-center px-8 text-center text-white"
           >
             <motion.p variants={item} className="text-xs uppercase tracking-[0.3em] text-white/60">
-              Counting down to
+              Counting down 
             </motion.p>
             <motion.div variants={item} className="mt-8 flex items-end justify-center gap-8">
               <div className="text-center">
