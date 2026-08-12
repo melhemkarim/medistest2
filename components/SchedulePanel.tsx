@@ -11,7 +11,7 @@ type Row = { time: string; label: string; dayHeader?: { day: string; date: strin
 const ROWS: Row[] = event.program.flatMap((day, di) =>
   day.items.map((it, ii) => ({
     ...it,
-    ...(ii === 0 ? { dayHeader: { day: day.day, date: day.date } } : {}),
+    ...(ii === 0 ? { dayHeader: { day: day.eyebrow, date: day.date } } : {}),
   }))
 );
 
