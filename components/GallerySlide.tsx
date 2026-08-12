@@ -26,6 +26,7 @@ const GALLERY_ITEMS = [
   "/images/8.mp4",
   "/images/9.jpeg",
   "/images/10.jpeg",
+
 ];
 
 const PHOTO_DURATION_MS = 3200;
@@ -130,8 +131,8 @@ export default function GallerySlide({ active }: { active: boolean }) {
           )}
         </AnimatePresence>
       )}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/45 to-black/80" />
-      <div className="absolute inset-0 bg-black/20" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-black/40 to-black/80" />
+      <div className="absolute inset-0 bg-black/25" />
       <div className="absolute inset-0 bg-grain" />
 
       {visibleCount > 1 && (

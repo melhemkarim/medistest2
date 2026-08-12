@@ -20,29 +20,38 @@ export const event = {
       city: "Mzaar, Lebanon",
     },
   ],
-  // Full two-day program — drives the dedicated schedule screen.
-  // Leave "time" empty on an item if it doesn't need one shown.
+  // The full program, split across separate screens — one segment per screen.
+  // Add/remove segments freely; each becomes its own swipeable slide.
+  // Leave "time" empty on an item if it doesn't need one shown, and leave
+  // dressCode/note empty ("") to hide those lines on that slide.
   program: [
     {
-      day: "Day One",
+      eyebrow: "Day One",
+      heading: "Morning",
       date: "Friday, September 5",
       items: [
         { time: "9:30 AM", label: "Arrival" },
-        { time: "", label: "Breakfast" },
-        { time: "", label: "Conference" },
-        { time: "", label: "Lunch" },
-        { time: "", label: "Buggy Road Trip" },
-        { time: "", label: "Abaya Night" },
+        { time: "9:30 – 10:30 AM", label: "Breakfast" },
+        { time: "10:30 AM – 2:00 PM", label: "OATH Standalone & Lunch" },
       ],
+      dressCode: "Sport Chic",
+      note: "",
     },
     {
-      day: "Day Two",
+      eyebrow: "Day One",
+      heading: "Evening",
+      date: "Friday, September 5",
+      items: [{ time: "5:00 PM – Late", label: "Buggy Road Trip & Abaya Night" }],
+      dressCode: "Comfy Wear",
+      note: "Please bring a jacket",
+    },
+    {
+      eyebrow: "Day Two",
+      heading: "Road To The Top",
       date: "Saturday, September 6",
-      items: [
-        { time: "", label: "Hotel Stay" },
-        { time: "", label: "Special Activity" },
-        { time: "", label: "Breakfast" },
-      ],
+      items: [{ time: "9:00 AM", label: "Road To The Top & Breakfast" }],
+      dressCode: "Comfy Sport Wear",
+      note: "",
     },
   ],
 };

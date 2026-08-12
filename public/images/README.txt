@@ -7,15 +7,22 @@ photo-5.jpg
 
 Each one is the background for a different screen of the invitation, in
 this order:
-  photo-1 -> Greeting (OATH)
-  photo-2 -> Date & location
-  photo-3 -> Program / schedule
-  photo-4 -> Countdown
+  photo-1 -> Date & location
+  photo-2 -> Day One, Morning
+  photo-3 -> Day One, Evening
+  photo-4 -> Day Two
   photo-5 -> RSVP
 
 Any size/aspect ratio works — it's cropped automatically. If any one is
 missing, that screen falls back to a generated brand-blue gradient instead
 of breaking, so you can add them one at a time.
+
+The Greeting (first) screen uses a light wave background instead of a
+photo — no file needed for it.
+
+The Countdown screen uses a VIDEO instead of a photo — drop a file named
+exactly countdown-bg.mp4 in this same folder. It autoplays muted and loops.
+If it's missing, that screen falls back to the same gradient too.
 
 (The "A look back" gallery screen uses its own separate photos/videos —
 see GALLERY-README.txt for that.)

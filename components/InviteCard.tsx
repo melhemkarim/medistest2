@@ -1,25 +1,27 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import RSVPForm from "./RSVPForm";
 import GallerySlide from "./GallerySlide";
-import SchedulePanel from "./SchedulePanel";
+import ScheduleSlide from "./ScheduleSlide";
 import { event } from "@/lib/event";
 
 /**
  * A different photo per screen. Drop your photos into /public/images
- * named exactly photo-1.jpg through photo-5.jpg (greeting, date/location,
- * program, countdown, RSVP — in that order). Any one that's missing just
- * falls back to the generated gradient automatically, so it's safe to add
- * them gradually.
+ * named exactly photo-1.jpg through photo-5.jpg (date/location, day 1
+ * morning, day 1 evening, day 2, RSVP — in that order). Any one that's
+ * missing just falls back to the generated gradient automatically, so
+ * it's safe to add them gradually.
+ * (The greeting screen uses the light wave background instead of a photo,
+ * and the countdown screen uses a video — see VideoBackground below.)
  */
 const PHOTOS = [
-  "/images/1.jpeg",
-  "/images/2.jpeg",
-  "/images/3.jpeg",
-  "/images/4.jpeg",
-  "/images/5.jpeg",
+  "/images/hotel.jpeg",
+  "/images/conf2.jpeg",
+  "/images/abaya.jpeg",
+  "/images/up.jpeg",
+  "/images/photo-5.jpeg",
 ];
 
 const mapLinkHref = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event.mapQuery)}`;
@@ -62,6 +64,50 @@ function useCountdown(target: string) {
   return t;
 }
 
+/**
+ * Soft, light wave background for the greeting screen only — everything
+ * else in the invite keeps the dark photo look. Pure CSS/SVG, no image file
+ * needed.
+ */
+function GreetingBackground() {
+  return (
+    <div className="absolute inset-0 -z-10 overflow-hidden bg-[#eef4fb]">
+      <svg
+        className="absolute top-0 inset-x-0 h-40 w-full sm:h-56"
+        viewBox="0 0 800 230"
+        preserveAspectRatio="none"
+        fill="none"
+      >
+        <path
+          d="M0,0 L800,0 L800,90 C680,150 560,60 420,120 C260,190 120,50 0,130 Z"
+          fill="#dbe9f9"
+        />
+        <path
+          d="M0,0 L800,0 L800,170 C700,230 600,140 460,200 C300,270 150,150 0,230 Z"
+          fill="#c9def4"
+          opacity="0.7"
+        />
+      </svg>
+      <svg
+        className="absolute bottom-0 inset-x-0 h-40 w-full sm:h-56"
+        viewBox="0 1370 800 230"
+        preserveAspectRatio="none"
+        fill="none"
+      >
+        <path
+          d="M0,1600 L800,1600 L800,1500 C680,1440 560,1530 420,1470 C260,1400 120,1520 0,1450 Z"
+          fill="#dbe9f9"
+        />
+        <path
+          d="M0,1600 L800,1600 L800,1430 C700,1370 600,1460 460,1400 C300,1330 150,1450 0,1380 Z"
+          fill="#c9def4"
+          opacity="0.7"
+        />
+      </svg>
+    </div>
+  );
+}
+
 function PanelBackground({ photoIndex, active }: { photoIndex: number; active: boolean }) {
   return (
     <div className="absolute inset-0 -z-10 overflow-hidden bg-brand-deep">
@@ -73,6 +119,8 @@ function PanelBackground({ photoIndex, active }: { photoIndex: number; active: b
             "radial-gradient(circle at 15% 20%, rgba(255,255,255,0.16), transparent 42%), radial-gradient(circle at 85% 10%, rgba(255,255,255,0.10), transparent 38%), radial-gradient(circle at 50% 100%, rgba(0,0,0,0.35), transparent 50%)",
         }}
       />
+      {/* real photo, filled/cropped on smaller screens where it fits closely,
+          shown whole (no crop) on desktop where the aspect ratio differs more */}
       <motion.img
         src={PHOTOS[photoIndex % PHOTOS.length]}
         alt=""
@@ -84,8 +132,57 @@ function PanelBackground({ photoIndex, active }: { photoIndex: number; active: b
           (e.currentTarget as HTMLImageElement).style.display = "none";
         }}
       />
-      <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/45 to-black/80" />
-      <div className="absolute inset-0 bg-black/50" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-black/40 to-black/80" />
+      <div className="absolute inset-0 bg-black/25" />
+      <div className="absolute inset-0 bg-grain" />
+    </div>
+  );
+}
+
+/**
+ * Same look as PanelBackground, but plays a looping video instead of a
+ * still photo. Used on the countdown screen. Drop your video into
+ * /public/images named countdown-bg.mp4 (webm/mov also work — just update
+ * the src below to match). If it's missing or fails to load, it silently
+ * falls back to the same generated gradient the photo panels use.
+ */
+function VideoBackground({ src, active }: { src: string; active: boolean }) {
+  const [broken, setBroken] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    if (active) {
+      v.play().catch(() => {});
+    } else {
+      v.pause();
+    }
+  }, [active]);
+
+  return (
+    <div className="absolute inset-0 -z-10 overflow-hidden bg-brand-deep">
+      <div
+        className="absolute inset-0"
+        style={{
+          backgroundImage:
+            "radial-gradient(circle at 15% 20%, rgba(255,255,255,0.16), transparent 42%), radial-gradient(circle at 85% 10%, rgba(255,255,255,0.10), transparent 38%), radial-gradient(circle at 50% 100%, rgba(0,0,0,0.35), transparent 50%)",
+        }}
+      />
+      {!broken && (
+        <video
+          ref={videoRef}
+          src={src}
+          muted
+          loop
+          playsInline
+          preload="auto"
+          className="relative h-full w-full object-cover"
+          onError={() => setBroken(true)}
+        />
+      )}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-black/40 to-black/80" />
+      <div className="absolute inset-0 bg-black/25" />
       <div className="absolute inset-0 bg-grain" />
     </div>
   );
@@ -113,7 +210,7 @@ function DetailsPanel({ active }: { active: boolean }) {
       >
         {/* Date */}
         <motion.div variants={detailsItem} className="flex flex-col items-center gap-3">
-          <p className="text-xs uppercase tracking-[0.3em] text-white/60">Save the date</p>
+          <p className="text-xs uppercase tracking-[0.3em] text-white">Save the date</p>
           <p className="font-display text-3xl italic sm:text-4xl">{event.dateLabel}</p>
           <div className="hairline w-12" />
         </motion.div>
@@ -121,10 +218,10 @@ function DetailsPanel({ active }: { active: boolean }) {
         {/* Schedule stop(s) */}
         {event.schedule.map((stop) => (
           <motion.div key={stop.venue} variants={detailsItem} className="flex flex-col items-center gap-2">
-            <p className="text-xs uppercase tracking-[0.2em] text-white/50">{stop.time}</p>
-            <p className="text-xs uppercase tracking-[0.2em] text-white/70">{stop.label}</p>
+            <p className="text-xs uppercase tracking-[0.2em] text-white">{stop.time}</p>
+            <p className="text-xs uppercase tracking-[0.2em] text-white">{stop.label}</p>
             <p className="font-display text-2xl italic sm:text-3xl">{stop.venue}</p>
-            <p className="text-sm text-white/60">{stop.city}</p>
+            <p className="text-sm text-white">{stop.city}</p>
           </motion.div>
         ))}
 
@@ -137,7 +234,7 @@ function DetailsPanel({ active }: { active: boolean }) {
           rel="noopener noreferrer"
           className="flex w-full items-center gap-3 rounded-xl border border-white/25 bg-white/10 px-5 py-4 text-left transition-colors hover:bg-white/15"
         >
-          <svg viewBox="0 0 24 24" fill="none" className="h-6 w-6 flex-shrink-0 text-white/80">
+          <svg viewBox="0 0 24 24" fill="none" className="h-6 w-6 flex-shrink-0 text-white">
             <path
               d="M12 22s7-7.58 7-12.5A7 7 0 0 0 5 9.5C5 14.42 12 22 12 22Z"
               stroke="currentColor"
@@ -147,24 +244,30 @@ function DetailsPanel({ active }: { active: boolean }) {
             <circle cx="12" cy="9.5" r="2.5" stroke="currentColor" strokeWidth="1.5" />
           </svg>
           <span className="flex-1 min-w-0">
-            <span className="block text-[10px] uppercase tracking-[0.2em] text-white/50">Find us here</span>
+            <span className="block text-[10px] uppercase tracking-[0.2em] text-white">Find us here</span>
             <span className="block truncate text-sm text-white/90">{event.mapQuery}</span>
           </span>
-          <span className="flex-shrink-0 text-[10px] uppercase tracking-[0.15em] text-white/60">Open ↗</span>
+          <span className="flex-shrink-0 text-[10px] uppercase tracking-[0.15em] text-white">Open ↗</span>
         </motion.a>
       </motion.div>
     </div>
   );
 }
 
-function Dots({ count, index }: { count: number; index: number }) {
+function Dots({ count, index, light = false }: { count: number; index: number; light?: boolean }) {
   return (
     <div className="pointer-events-none absolute inset-x-0 bottom-7 z-20 flex justify-center gap-2">
       {Array.from({ length: count }).map((_, i) => (
         <span
           key={i}
           className={`h-1.5 rounded-full transition-all duration-300 ${
-            i === index ? "w-6 bg-white" : "w-1.5 bg-white/40"
+            i === index
+              ? light
+                ? "w-6 bg-slate-700"
+                : "w-6 bg-white"
+              : light
+                ? "w-1.5 bg-slate-700/30"
+                : "w-1.5 bg-white/40"
           }`}
         />
       ))}
@@ -172,11 +275,21 @@ function Dots({ count, index }: { count: number; index: number }) {
   );
 }
 
-function NextButton({ onClick, label = "Swipe" }: { onClick: () => void; label?: string }) {
+function NextButton({
+  onClick,
+  label = "Swipe",
+  light = false,
+}: {
+  onClick: () => void;
+  label?: string;
+  light?: boolean;
+}) {
   return (
     <button
       onClick={onClick}
-      className="group absolute bottom-16 right-6 z-20 flex flex-col items-center gap-1 text-white/70 transition-colors hover:text-white sm:right-10"
+      className={`group absolute bottom-16 right-6 z-20 flex flex-col items-center gap-1 transition-colors sm:right-10 ${
+        light ? "text-slate-500 hover:text-slate-800" : "text-white/70 hover:text-white"
+      }`}
       aria-label="Next"
     >
       <span className="text-[10px] uppercase tracking-[0.2em]">{label}</span>
@@ -203,7 +316,7 @@ function BackButton({ onClick }: { onClick: () => void }) {
 }
 
 export default function InviteCard({ name, slug }: { name: string; slug: string }) {
-  const PANEL_COUNT = 6;
+  const PANEL_COUNT = 8;
   const [index, setIndex] = useState(0);
   const [vw, setVw] = useState(0);
   const t = useCountdown(event.isoDateTime);
@@ -239,98 +352,126 @@ export default function InviteCard({ name, slug }: { name: string; slug: string 
       >
         {/* Panel 1 — Greeting */}
         <div className="relative h-full w-screen flex-shrink-0">
-          <PanelBackground photoIndex={0} active={index === 0} />
+          <GreetingBackground />
           <motion.div
             variants={container}
             initial="hidden"
             animate={index === 0 ? "show" : "hidden"}
-            className="flex h-full flex-col items-center justify-center px-8 text-center text-white"
+            className="flex h-full flex-col items-center justify-center px-4 text-center text-slate-800 sm:px-8"
           >
-            <motion.p variants={item} className="text-3xl uppercase tracking-[0.3em] text-white">
-              Medispharm and AWMU invite you to
-            </motion.p>
+            <motion.div variants={item} className="flex w-full items-center justify-center gap-3 sm:gap-8">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/brand/medispharm-logo.png" alt="MedisPharm" className="h-16 w-auto flex-shrink-0 sm:h-20" />
+              <div className="h-10 w-px flex-shrink-0 bg-slate-300 sm:h-10" />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/brand/awmu-logo.png" alt="AWMU" className="h-16 w-auto flex-shrink-0 sm:h-20" />
+            </motion.div>
 
-            <motion.h1 variants={item} className="mt-5 font-display text-6xl  leading-none sm:text-7xl">
-              {event.title}
-            </motion.h1>
+            <motion.div variants={item} className="mt-8 flex w-full max-w-xs items-center gap-4 sm:max-w-sm">
+              <span className="h-px flex-1 bg-slate-300" />
+              <span className="whitespace-nowrap text-sm text-slate-500 sm:text-base">invites you to</span>
+              <span className="h-px flex-1 bg-slate-300" />
+            </motion.div>
 
-            {event.tagline && (
-              <motion.p variants={item} className="mt-5  text-sm uppercase tracking-[0.25em] text-white">
-                {event.tagline}
-              </motion.p>
-            )}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <motion.img
+              variants={item}
+              src="/brand/oath-logo.png"
+              alt={`${event.title} — ${event.tagline}`}
+              className="mx-auto mt-7 h-24 w-auto sm:h-32"
+            />
           </motion.div>
-          <NextButton onClick={() => goTo(1)} />
-          <Dots count={PANEL_COUNT} index={index} />
+          <NextButton onClick={() => goTo(1)} light />
+          <Dots count={PANEL_COUNT} index={index} light={index === 0} />
         </div>
 
         {/* Panel 2 — Date, time & location, revealed one piece at a time + map */}
         <div className="relative h-full w-screen flex-shrink-0">
-          <PanelBackground photoIndex={1} active={index === 1} />
+          <PanelBackground photoIndex={0} active={index === 1} />
           <DetailsPanel active={index === 1} />
           <BackButton onClick={() => goTo(0)} />
           <NextButton onClick={() => goTo(2)} />
           <Dots count={PANEL_COUNT} index={index} />
         </div>
 
-        {/* Panel 3 — Full program / schedule, revealed one event at a time */}
+        {/* Panel 3 — Day One, Morning */}
         <div className="relative h-full w-screen flex-shrink-0">
-          <PanelBackground photoIndex={2} active={index === 2} />
-          <SchedulePanel active={index === 2} />
+          <PanelBackground photoIndex={1} active={index === 2} />
+          <ScheduleSlide data={event.program[0]} active={index === 2} />
           <BackButton onClick={() => goTo(1)} />
           <NextButton onClick={() => goTo(3)} />
           <Dots count={PANEL_COUNT} index={index} />
         </div>
 
-        {/* Panel 4 — Countdown */}
+        {/* Panel 4 — Day One, Evening */}
         <div className="relative h-full w-screen flex-shrink-0">
-          <PanelBackground photoIndex={3} active={index === 3} />
-          <motion.div
-            variants={container}
-            initial="hidden"
-            animate={index === 3 ? "show" : "hidden"}
-            className="flex h-full flex-col items-center justify-center px-8 text-center text-white"
-          >
-            <motion.p variants={item} className="text-xs uppercase tracking-[0.3em] text-white/60">
-              Counting down to
-            </motion.p>
-            <motion.div variants={item} className="mt-6 flex items-end justify-center gap-6">
-              <div className="text-center">
-                <p className="font-display text-7xl italic leading-none">{t ? t.days : "--"}</p>
-                <p className="mt-2 text-[10px] uppercase tracking-[0.2em] text-white/60">Days</p>
-              </div>
-              <div className="h-16 w-px bg-white/25" />
-              <div className="space-y-3 text-left">
-                <div className="flex items-baseline gap-2">
-                  <span className="font-display text-2xl italic">{t ? t.hours : "--"}</span>
-                  <span className="text-[10px] uppercase tracking-[0.2em] text-white/50">Hours</span>
-                </div>
-                <div className="flex items-baseline gap-2">
-                  <span className="font-display text-2xl italic">{t ? t.minutes : "--"}</span>
-                  <span className="text-[10px] uppercase tracking-[0.2em] text-white/50">Minutes</span>
-                </div>
-                <div className="flex items-baseline gap-2">
-                  <span className="font-display text-2xl italic">{t ? t.seconds : "--"}</span>
-                  <span className="text-[10px] uppercase tracking-[0.2em] text-white/50">Seconds</span>
-                </div>
-              </div>
-            </motion.div>
-            <motion.p variants={item} className="mt-10 font-display text-lg italic text-white/80">
-              {t?.done ? "the celebration has begun" : "celebrate together"}
-            </motion.p>
-          </motion.div>
+          <PanelBackground photoIndex={2} active={index === 3} />
+          <ScheduleSlide data={event.program[1]} active={index === 3} />
           <BackButton onClick={() => goTo(2)} />
           <NextButton onClick={() => goTo(4)} />
           <Dots count={PANEL_COUNT} index={index} />
         </div>
 
-        {/* Panel 5 — Photo slideshow from a previous event */}
+        {/* Panel 5 — Day Two */}
         <div className="relative h-full w-screen flex-shrink-0">
-          <GallerySlide active={index === 4} />
+          <PanelBackground photoIndex={3} active={index === 4} />
+          <ScheduleSlide data={event.program[2]} active={index === 4} />
+          <BackButton onClick={() => goTo(3)} />
+          <NextButton onClick={() => goTo(5)} />
+          <Dots count={PANEL_COUNT} index={index} />
+        </div>
+
+        {/* Panel 6 — Countdown */}
+        <div className="relative h-full w-screen flex-shrink-0">
+          <VideoBackground src="/images/countdown-bg.mp4" active={index === 5} />
           <motion.div
             variants={container}
             initial="hidden"
-            animate={index === 4 ? "show" : "hidden"}
+            animate={index === 5 ? "show" : "hidden"}
+            className="flex h-full flex-col items-center justify-center px-8 text-center text-white"
+          >
+            <motion.p variants={item} className="text-xs uppercase tracking-[0.3em] text-white/60">
+              Counting down to
+            </motion.p>
+            <motion.div variants={item} className="mt-8 flex items-end justify-center gap-8">
+              <div className="text-center">
+                <p className="font-display text-9xl italic leading-none">{t ? t.days : "--"}</p>
+                <p className="mt-3 text-xs uppercase tracking-[0.2em] text-white/60">Days</p>
+              </div>
+              <div className="h-24 w-px bg-white/25" />
+              <div className="space-y-5 text-left">
+                <div className="flex items-baseline gap-3">
+                  <span className="font-display text-4xl italic">{t ? t.hours : "--"}</span>
+                  <span className="text-xs uppercase tracking-[0.2em] text-white/50">Hours</span>
+                </div>
+                <div className="flex items-baseline gap-3">
+                  <span className="font-display text-4xl italic">{t ? t.minutes : "--"}</span>
+                  <span className="text-xs uppercase tracking-[0.2em] text-white/50">Minutes</span>
+                </div>
+                <div className="flex items-baseline gap-3">
+                  <span className="font-display text-4xl italic">{t ? t.seconds : "--"}</span>
+                  <span className="text-xs uppercase tracking-[0.2em] text-white/50">Seconds</span>
+                </div>
+              </div>
+            </motion.div>
+            {t?.done && (
+              <motion.p variants={item} className="mt-10 font-display text-lg italic text-white/80">
+                the celebration has begun
+              </motion.p>
+            )}
+          </motion.div>
+          <BackButton onClick={() => goTo(4)} />
+          <NextButton onClick={() => goTo(6)} />
+          <Dots count={PANEL_COUNT} index={index} />
+        </div>
+
+        {/* Panel 7 — Photo slideshow from a previous event */}
+        <div className="relative h-full w-screen flex-shrink-0">
+          <GallerySlide active={index === 6} />
+          <motion.div
+            variants={container}
+            initial="hidden"
+            animate={index === 6 ? "show" : "hidden"}
             className="flex h-full flex-col items-center justify-end px-8 pb-28 text-center text-white"
           >
             <motion.p variants={item} className="text-xs uppercase tracking-[0.3em] text-white/60">
@@ -340,36 +481,36 @@ export default function InviteCard({ name, slug }: { name: string; slug: string 
               Moments from last time
             </motion.p>
           </motion.div>
-          <BackButton onClick={() => goTo(3)} />
-          <NextButton onClick={() => goTo(5)} label="RSVP" />
+          <BackButton onClick={() => goTo(5)} />
+          <NextButton onClick={() => goTo(7)} label="RSVP" />
           <Dots count={PANEL_COUNT} index={index} />
         </div>
 
-        {/* Panel 6 — Guest name + RSVP */}
+        {/* Panel 8 — Guest name + RSVP */}
         <div className="relative h-full w-screen flex-shrink-0">
-          <PanelBackground photoIndex={4} active={index === 5} />
-          <motion.div
-            variants={container}
-            initial="hidden"
-            animate={index === 5 ? "show" : "hidden"}
-            className="flex h-full flex-col items-center justify-center px-8 text-center text-white"
-          >
-            <motion.p variants={item} className="text-sm uppercase tracking-[0.2em] text-white/60">
-              Dear
-            </motion.p>
-            <motion.h1 variants={item} className="mt-3 font-display text-4xl italic sm:text-5xl">
-              {name}
-            </motion.h1>
+  <GreetingBackground />
+  <motion.div
+  variants={container}
+  initial="hidden"
+  animate={index === 7 ? "show" : "hidden"}
+  className="flex h-full flex-col items-center justify-center px-8 text-center text-[#0085B7]"
+>
+  <motion.p variants={item} className="text-sm uppercase tracking-[0.2em] text-[#0085B7]/70">
+    Dear
+  </motion.p>
+  <motion.h1 variants={item} className="mt-3 font-display text-4xl italic sm:text-5xl">
+    {name}
+  </motion.h1>
 
-            <motion.p variants={item} className="mt-6 font-display text-xl italic text-white/85">
-              Will you attend?
-            </motion.p>
+  <motion.p variants={item} className="mt-6 font-display text-xl italic text-[#0085B7]/85">
+    Will you attend?
+  </motion.p>
 
             <motion.div variants={item} className="mt-8 w-full max-w-xs">
               <RSVPForm name={name} slug={slug} />
             </motion.div>
           </motion.div>
-          <BackButton onClick={() => goTo(4)} />
+          <BackButton onClick={() => goTo(6)} />
           <Dots count={PANEL_COUNT} index={index} />
         </div>
       </motion.div>
