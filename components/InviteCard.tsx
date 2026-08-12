@@ -6,7 +6,7 @@ import RSVPForm from "./RSVPForm";
 import GallerySlide from "./GallerySlide";
 import ScheduleSlide from "./ScheduleSlide";
 import { event } from "@/lib/event";
-
+import MusicToggle from "@/components/MusicToggle";
 /**
  * A different photo per screen. Drop your photos into /public/images
  * named exactly photo-1.jpg through photo-5.jpg (date/location, day 1
@@ -332,6 +332,7 @@ export default function InviteCard({ name, slug }: { name: string; slug: string 
 
   return (
     <div className="fixed inset-0 overflow-hidden bg-brand-deep">
+      <MusicToggle />
       <motion.div
         className="flex h-full"
         animate={{ x: -index * vw }}
