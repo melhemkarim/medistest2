@@ -109,7 +109,7 @@ function GreetingBackground() {
 
 function PanelBackground({ photoIndex, active }: { photoIndex: number; active: boolean }) {
   return (
-    <div className="absolute inset-0 -z-10 overflow-hidden bg-brand-deep">
+    <div className="absolute inset-0 -z-10 overflow-hidden bg-white">
       {/* generated placeholder texture — shows through until a real photo is added, or behind transparent areas of one */}
       <div
         className="absolute inset-0"
@@ -160,7 +160,7 @@ function VideoBackground({ src, active }: { src: string; active: boolean }) {
   }, [active]);
 
   return (
-    <div className="absolute inset-0 -z-10 overflow-hidden bg-brand-deep">
+    <div className="absolute inset-0 -z-10 overflow-hidden bg-white">
       <div
         className="absolute inset-0"
         style={{
@@ -330,7 +330,7 @@ export default function InviteCard({ name, slug }: { name: string; slug: string 
   const goTo = (i: number) => setIndex(Math.max(0, Math.min(PANEL_COUNT - 1, i)));
 
   return (
-    <div className="fixed inset-0 overflow-hidden bg-brand-deep">
+    <div className="fixed inset-0 overflow-hidden bg-white">
       <MusicToggle />
       <motion.div
         className="flex h-full"
@@ -474,16 +474,16 @@ export default function InviteCard({ name, slug }: { name: string; slug: string 
   variants={container}
   initial="hidden"
   animate={index === 6 ? "show" : "hidden"}
-  className="flex h-full flex-col items-center justify-center px-8 text-center text-[#0085B7]"
+  className="flex h-full flex-col items-center justify-center px-8 text-center text-[#4e2a6e]"
 >
-  <motion.p variants={item} className="text-sm uppercase tracking-[0.2em] text-[#0085B7]/70">
+  <motion.p variants={item} className="text-sm uppercase tracking-[0.2em] text-[#4e2a6e]">
     Dear
   </motion.p>
   <motion.h1 variants={item} className="mt-3 font-display text-4xl italic sm:text-5xl">
     {name}
   </motion.h1>
 
-  <motion.p variants={item} className="mt-6 font-display text-xl italic text-[#0085B7]/85">
+  <motion.p variants={item} className="mt-6 font-display text-xl italic text-[#4e2a6e]">
     Will you attend?
   </motion.p>
 

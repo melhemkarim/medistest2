@@ -89,7 +89,7 @@ export default function GallerySlide({ active }: { active: boolean }) {
   const current = GALLERY_ITEMS[i];
 
   return (
-    <div className="absolute inset-0 -z-10 overflow-hidden bg-brand-deep">
+    <div className="absolute inset-0 -z-10 overflow-hidden bg-white">
       <div
         className="absolute inset-0"
         style={{
