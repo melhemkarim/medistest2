@@ -106,7 +106,35 @@ function GreetingBackground() {
     </div>
   );
 }
-
+function ImageBackground({
+  src,
+  desktopSrc,
+  alt,
+  fit = "cover",
+}: {
+  src: string;
+  /** Optional wider/landscape image swapped in at >=768px viewports via a
+   * <picture> media query (pure CSS, no JS/layout-shift). Use this when the
+   * mobile art is portrait and would otherwise letterbox on desktop. */
+  desktopSrc?: string;
+  alt: string;
+  /** "cover" fills the screen and crops; "contain" shows the whole image
+   * letterboxed on the bg color — use "contain" for art with fixed
+   * logo/text placement so nothing gets cropped off on viewports with a
+   * different aspect ratio than the source image. */
+  fit?: "cover" | "contain";
+}) {
+  const fitClass = fit === "contain" ? "object-contain" : "object-cover";
+  return (
+    <div className="absolute inset-0 -z-10 overflow-hidden bg-[#faf6f0]">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <picture>
+        {desktopSrc && <source media="(min-width: 768px)" srcSet={desktopSrc} />}
+        <img src={src} alt={alt} className={`h-full w-full ${fitClass}`} />
+      </picture>
+    </div>
+  );
+}
 function PanelBackground({ photoIndex, active }: { photoIndex: number; active: boolean }) {
   return (
     <div className="absolute inset-0 -z-10 overflow-hidden bg-white">
@@ -351,39 +379,11 @@ export default function InviteCard({ name, slug }: { name: string; slug: string 
         }}
       >
         {/* Panel 1 — Greeting */}
-        <div className="relative h-full w-screen flex-shrink-0">
-          <GreetingBackground />
-          <motion.div
-            variants={container}
-            initial="hidden"
-            animate={index === 0 ? "show" : "hidden"}
-            className="flex h-full flex-col items-center justify-center px-4 text-center text-slate-800 sm:px-8"
-          >
-            <motion.div variants={item} className="flex w-full items-center justify-center gap-3 sm:gap-8">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/brand/medispharm-logo.png" alt="MedisPharm" className="h-16 w-auto flex-shrink-0 sm:h-20" />
-              <div className="h-10 w-px flex-shrink-0 bg-slate-300 sm:h-10" />
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/brand/awmu-logo.png" alt="AWMU" className="h-16 w-auto flex-shrink-0 sm:h-20" />
-            </motion.div>
-
-            <motion.div variants={item} className="mt-8 flex w-full max-w-xs items-center gap-4 sm:max-w-sm">
-              <span className="h-px flex-1 bg-slate-300" />
-              <span className="whitespace-nowrap text-sm text-slate-500 sm:text-base">invites you to</span>
-              <span className="h-px flex-1 bg-slate-300" />
-            </motion.div>
-
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <motion.img
-              variants={item}
-              src="/brand/oath-logo.png"
-              alt={`${event.title} — ${event.tagline}`}
-              className="mx-auto mt-7 h-24 w-auto sm:h-32"
-            />
-          </motion.div>
-          <NextButton onClick={() => goTo(1)} light />
-          <Dots count={PANEL_COUNT} index={index} light={index === 0} />
-        </div>
+<div className="relative h-full w-screen flex-shrink-0">
+  <ImageBackground src="/backgrounds/panel1-bg-mobile.png" desktopSrc="/backgrounds/panel1-bg-desktop.png" alt="MedisPharm and AWMU invite you to OATH" />
+  <NextButton onClick={() => goTo(1)} light />
+  <Dots count={PANEL_COUNT} index={index} light={index === 0} />
+</div>
 
         {/* Panel 2 — Date, time & location, revealed one piece at a time + map */}
         <div className="relative h-full w-screen flex-shrink-0">
@@ -469,7 +469,7 @@ export default function InviteCard({ name, slug }: { name: string; slug: string 
 
         {/* Panel 8 — Guest name + RSVP */}
         <div className="relative h-full w-screen flex-shrink-0">
-  <GreetingBackground />
+  <ImageBackground src="/backgrounds/panel-last-bg-mobile.jpeg" desktopSrc="/backgrounds/panel-last-bg-desktop.png" alt="Because you are at the heart of what we do — MedisPharm Family" />
   <motion.div
   variants={container}
   initial="hidden"
