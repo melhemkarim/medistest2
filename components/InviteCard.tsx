@@ -208,8 +208,8 @@ function VideoBackground({ src, active }: { src: string; active: boolean }) {
           onError={() => setBroken(true)}
         />
       )}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-black/40 to-black/80" />
-      <div className="absolute inset-0 bg-black/25" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/40 to-black/60" />
+      <div className="absolute inset-0 bg-black/5" />
       <div className="absolute inset-0 bg-grain" />
     </div>
   );
